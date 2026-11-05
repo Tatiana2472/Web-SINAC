@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -13,10 +12,11 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Memoria / Almacenamiento local SQLite
-const dbFile = path.join(__dirname, '../database/sinac.sqlite');
+// Sitio compilado (carpeta dist/)
+const distPath = path.join(__dirname, '../dist');
+app.use(express.static(distPath));
 
-// Memoria cache simulada para endpoints REST
+// Reservaciones en memoria (pendiente: conectar a la base de datos)
 let reservations = [
   {
     id: 1,
@@ -30,22 +30,19 @@ let reservations = [
     monto_total: 1600.0,
     estado: 'Confirmada',
     created_at: new Date().toISOString(),
-  }
+  },
 ];
 
 // --- ENDPOINTS REST API SINAC ---
 
-// 1. Áreas de Conservación
 app.get('/api/conservation-areas', (req, res) => {
   res.json({ status: 'success', data: 'Acceso a Áreas de Conservación de Costa Rica' });
 });
 
-// 2. Parques Nacionales
 app.get('/api/parks', (req, res) => {
   res.json({ status: 'success', message: 'Lista de Parques Nacionales' });
 });
 
-// 3. Crear Reservación (Booking Modal)
 app.post('/api/reservations', (req, res) => {
   const { parque_id, nombre_visitante, email_visitante, telefono_visitante, cantidad_visitantes, fecha_visita } = req.body;
 
@@ -68,16 +65,15 @@ app.post('/api/reservations', (req, res) => {
   };
 
   reservations.push(newReservation);
+  console.log('[API] Reservación registrada:', newReservation.codigo_reserva);
 
-  console.log('[API Server] Reservación registrada con éxito:', newReservation);
   res.status(201).json({
     status: 'success',
-    message: 'Reservación guardada correctamente en la Base de Datos',
+    message: 'Reservación guardada correctamente',
     data: newReservation,
   });
 });
 
-// 4. Obtener todas las reservaciones (Para el Dashboard)
 app.get('/api/reservations', (req, res) => {
   res.json({
     status: 'success',
@@ -86,7 +82,14 @@ app.get('/api/reservations', (req, res) => {
   });
 });
 
-// Inicializar servidor
+// Rutas de React: cualquier ruta que no sea /api devuelve index.html
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !req.path.startsWith('/api')) {
+    return res.sendFile(path.join(distPath, 'index.html'));
+  }
+  next();
+});
+
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor API de Base de Datos SINAC escuchando en http://localhost:${PORT}`);
+  console.log(`Servidor SINAC escuchando en el puerto ${PORT}`);
 });

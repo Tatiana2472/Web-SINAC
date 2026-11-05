@@ -1,11 +1,12 @@
-# Soporte para rutas de React Router en Apache / InfinityFree
-Options -MultiViews
-RewriteEngine On
+# Soporte para rutas de React Router en Apache / InfinityFree / rf.gd
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
 
-# Servir directamente archivos y carpetas existentes
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
+  # No redirigir si el archivo o directorio existe fisicamente
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
 
-# Enviar las demás rutas a la aplicación React
-RewriteRule ^ index.html [L]
+  # Enviar las demas rutas al index.html de React
+  RewriteRule . /index.html [L]
+</IfModule>
