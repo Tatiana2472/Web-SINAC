@@ -25,52 +25,7 @@ export function BookingModal({ isOpen, onClose, parkName }: BookingModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-
-  const sendBookingEmail = async () => {
-    const recipient = formData.email.trim();
-    const subject = isEnglish
-      ? `New reservation request for ${effectiveParkName}`
-      : `Nueva solicitud de reserva para ${effectiveParkName}`;
-      
-    let formattedDate = formData.date;
-    if (formData.date) {
-      const [year, month, day] = formData.date.split('-');
-      formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString(isEnglish ? 'en-US' : 'es-ES', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    }
-
-    try {
-      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipient)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          [isEnglish ? 'Name' : 'Nombre']: formData.name,
-          [isEnglish ? 'Phone' : 'Teléfono']: formData.phone,
-          [isEnglish ? 'Email' : 'Correo']: recipient,
-          [isEnglish ? 'Park' : 'Parque']: effectiveParkName,
-          [isEnglish ? 'Date' : 'Fecha']: formattedDate,
-          [isEnglish ? 'Visitors' : 'Visitantes']: formData.visitors,
-          _subject: subject,
-          _template: 'box',
-          _captcha: 'false',
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('The email service did not accept the request.');
-      }
-    } catch {
-      const fallbackBody = `${isEnglish ? 'Name' : 'Nombre'}: ${formData.name}\n${isEnglish ? 'Phone' : 'Teléfono'}: ${formData.phone}\n${isEnglish ? 'Date' : 'Fecha'}: ${formattedDate}\n${isEnglish ? 'Visitors' : 'Visitantes'}: ${formData.visitors}`;
-      window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fallbackBody)}`;
-    }
-  };
+  const [reservationCode, setReservationCode] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,8 +33,7 @@ export function BookingModal({ isOpen, onClose, parkName }: BookingModalProps) {
     setIsSubmitting(true);
 
     try {
-      // Guardar en la Base de Datos
-      await dbService.createReservation({
+      const reservation = await dbService.createReservation({
         parque_id: parkName || 'pn-volcan-tenorio',
         nombre_visitante: formData.name,
         email_visitante: formData.email,
@@ -88,9 +42,7 @@ export function BookingModal({ isOpen, onClose, parkName }: BookingModalProps) {
         fecha_visita: formData.date,
       });
 
-      // Enviar correo de notificación
-      await sendBookingEmail();
-
+      setReservationCode(reservation.codigo_reserva || '');
       setIsSubmitting(false);
       setIsSuccess(true);
 
@@ -99,10 +51,14 @@ export function BookingModal({ isOpen, onClose, parkName }: BookingModalProps) {
         setStep(1);
         setIsSuccess(false);
         setFormData({ date: '', visitors: '2', name: '', email: '', phone: '' });
-      }, 3000);
+      }, 5000);
     } catch {
       setIsSubmitting(false);
-      setSubmitError(isEnglish ? 'We saved your reservation in the DB, but could not send the email notification.' : 'Se guardó la reservación en la Base de Datos, pero no se pudo enviar el correo de notificación.');
+      setSubmitError(
+        isEnglish
+          ? 'We could not save your reservation. Please try again later.'
+          : 'No se pudo guardar la reservación. Intente de nuevo más tarde.'
+      );
     }
   };
 
@@ -444,9 +400,8 @@ export function BookingModal({ isOpen, onClose, parkName }: BookingModalProps) {
                 </div>
                 <h3 className="text-2xl font-bold text-[#1E3A2B] mb-2">{isEnglish ? 'Booking confirmed!' : '¡Reserva confirmada!'}</h3>
                 <p className="text-gray-600 mb-4">
-                  {isEnglish
-                    ? `We sent the confirmation to ${formData.email}`
-                    : `Hemos enviado la confirmación a ${formData.email}`}
+                  {isEnglish ? 'Reservation code: ' : 'Código de reservación: '}
+                  <strong>{reservationCode}</strong>
                 </p>
                 <p className="text-sm text-gray-500">
                   {isEnglish

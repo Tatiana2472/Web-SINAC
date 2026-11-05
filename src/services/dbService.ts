@@ -18,7 +18,8 @@ export interface Reservacion {
   created_at?: string;
 }
 
-const API_BASE_URL = 'http://localhost:3001/api';
+// Ruta relativa: funciona en localhost:3001 y en Laravel Cloud (mismo dominio)
+const API_BASE_URL = '/api';
 const LOCAL_STORAGE_KEY = 'sinac_reservaciones_db';
 
 export const dbService = {
@@ -26,35 +27,19 @@ export const dbService = {
    * Guarda una nueva reservación en la Base de Datos.
    */
   async createReservation(data: Omit<Reservacion, 'id' | 'codigo_reserva' | 'created_at'>): Promise<Reservacion> {
-    try {
-      // Intentar enviar al backend Express API
-      const response = await fetch(`${API_BASE_URL}/reservations`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+    const response = await fetch(`${API_BASE_URL}/reservations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
 
-      if (response.ok) {
-        const result = await response.json();
-        this.saveToLocalStorage(result.data);
-        return result.data;
-      }
-    } catch (error) {
-      console.warn('[DB Service] Servidor backend no detectado. Guardando en almacenamiento de base de datos local.', error);
+    if (!response.ok) {
+      throw new Error(`Error ${response.status} al guardar la reservación`);
     }
 
-    // Fallback: Guardar en almacenamiento persistente local de la base de datos
-    const localReservation: Reservacion = {
-      ...data,
-      id: Date.now(),
-      codigo_reserva: `SINAC-${Math.floor(100000 + Math.random() * 900000)}`,
-      monto_total: data.cantidad_visitantes * 800,
-      estado: 'Confirmada',
-      created_at: new Date().toISOString(),
-    };
-
-    this.saveToLocalStorage(localReservation);
-    return localReservation;
+    const result = await response.json();
+    this.saveToLocalStorage(result.data);
+    return result.data;
   },
 
   /**
@@ -68,7 +53,7 @@ export const dbService = {
         return result.data;
       }
     } catch (error) {
-      console.warn('[DB Service] Leyendo de base de datos local:', error);
+      console.warn('[DB Service] Leyendo de almacenamiento local:', error);
     }
 
     const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
