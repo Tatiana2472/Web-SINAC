@@ -1,0 +1,10 @@
+[2026-11-07T03:56:46.096Z] === INICIO DE PRUEBA DE CARGA Y MONITOREO DE RENDIMIENTO ===
+[2026-11-07T03:56:46.099Z] Servidor objetivo: http://localhost:3001
+[2026-11-07T03:56:46.099Z] Clientes concurrentes (VUs): 10
+[2026-11-07T03:56:46.099Z] Solicitudes por cliente y escenario: 50
+[2026-11-07T03:56:46.099Z] Umbrales definidos: Tasa de error = 0% | Latencia P95 < 500 ms
+[2026-11-07T03:56:48.109Z] Resultado [GET / (Página Principal)]: Total=500 | Exitosas=500 | Fallidas=0 (0%) | RPS=1569.31 req/s | Promedio=5.23ms | P50=3.81ms | P95=8.21ms | P99=33.53ms | Max=91.9ms | Cumple Umbrales=SÍ
+[2026-11-07T03:56:48.110Z] Resultado [GET /api/reservations (Consulta SQLite WAL)]: Total=500 | Exitosas=500 | Fallidas=0 (0%) | RPS=576.44 req/s | Promedio=17.16ms | P50=16.31ms | P95=24.78ms | P99=36.41ms | Max=39.58ms | Cumple Umbrales=SÍ
+[2026-11-07T03:56:48.110Z] Resultado [POST /api/reservations (Escritura SQLite WAL)]: Total=500 | Exitosas=500 | Fallidas=0 (0%) | RPS=610.07 req/s | Promedio=16.21ms | P50=15.53ms | P95=19.79ms | P99=31.9ms | Max=40.63ms | Cumple Umbrales=SÍ
+[2026-11-07T03:56:48.110Z] Prueba Negativa (POST sin campos requeridos): HTTP 400 - Respuesta: {"error":"Faltan campos requeridos (nombre, email, fecha_visita)"} (1.58 ms) -> APROBADA
+[2026-11-07T03:56:48.110Z] === PRUEBA DE CARGA FINALIZADA EXITOSAMENTE ===

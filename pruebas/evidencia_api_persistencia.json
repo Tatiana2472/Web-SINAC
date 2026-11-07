@@ -1,0 +1,100 @@
+{
+  "inicial": {
+    "status": "success",
+    "count": 0,
+    "data": []
+  },
+  "validacion400": {
+    "error": "Faltan campos requeridos (nombre, email, fecha_visita)"
+  },
+  "antesRedeploy": {
+    "status": "success",
+    "count": 3,
+    "data": [
+      {
+        "id": 1,
+        "codigo_reserva": "SINAC-802953",
+        "parque_id": "pn-volcan-tenorio",
+        "nombre_visitante": "Royner Gutiérrez Ugalde",
+        "email_visitante": "gutierrezroyner3@gmail.com",
+        "telefono_visitante": "+506 8888-2472",
+        "cantidad_visitantes": 2,
+        "fecha_visita": "2026-11-15",
+        "monto_total": 1600,
+        "estado": "Pendiente",
+        "created_at": "2026-11-07T03:56:42.953Z"
+      },
+      {
+        "id": 2,
+        "codigo_reserva": "SINAC-802982",
+        "parque_id": "pn-cano-negro",
+        "nombre_visitante": "Jocelyn Carballo Castillo",
+        "email_visitante": "jocelyn.carballo@est.utn.ac.cr",
+        "telefono_visitante": "+506 8777-3006",
+        "cantidad_visitantes": 3,
+        "fecha_visita": "2026-11-18",
+        "monto_total": 2400,
+        "estado": "Pendiente",
+        "created_at": "2026-11-07T03:56:42.982Z"
+      },
+      {
+        "id": 3,
+        "codigo_reserva": "SINAC-803026",
+        "parque_id": "pn-volcan-tenorio",
+        "nombre_visitante": "Camila Investigadora SINAC",
+        "email_visitante": "camila@est.utn.ac.cr",
+        "telefono_visitante": "+506 8666-1122",
+        "cantidad_visitantes": 4,
+        "fecha_visita": "2026-11-22",
+        "monto_total": 3200,
+        "estado": "Pendiente",
+        "created_at": "2026-11-07T03:56:43.026Z"
+      }
+    ]
+  },
+  "despuesRedeploy": {
+    "status": "success",
+    "count": 3,
+    "data": [
+      {
+        "id": 1,
+        "codigo_reserva": "SINAC-802953",
+        "parque_id": "pn-volcan-tenorio",
+        "nombre_visitante": "Royner Gutiérrez Ugalde",
+        "email_visitante": "gutierrezroyner3@gmail.com",
+        "telefono_visitante": "+506 8888-2472",
+        "cantidad_visitantes": 2,
+        "fecha_visita": "2026-11-15",
+        "monto_total": 1600,
+        "estado": "Pendiente",
+        "created_at": "2026-11-07T03:56:42.953Z"
+      },
+      {
+        "id": 2,
+        "codigo_reserva": "SINAC-802982",
+        "parque_id": "pn-cano-negro",
+        "nombre_visitante": "Jocelyn Carballo Castillo",
+        "email_visitante": "jocelyn.carballo@est.utn.ac.cr",
+        "telefono_visitante": "+506 8777-3006",
+        "cantidad_visitantes": 3,
+        "fecha_visita": "2026-11-18",
+        "monto_total": 2400,
+        "estado": "Pendiente",
+        "created_at": "2026-11-07T03:56:42.982Z"
+      },
+      {
+        "id": 3,
+        "codigo_reserva": "SINAC-803026",
+        "parque_id": "pn-volcan-tenorio",
+        "nombre_visitante": "Camila Investigadora SINAC",
+        "email_visitante": "camila@est.utn.ac.cr",
+        "telefono_visitante": "+506 8666-1122",
+        "cantidad_visitantes": 4,
+        "fecha_visita": "2026-11-22",
+        "monto_total": 3200,
+        "estado": "Pendiente",
+        "created_at": "2026-11-07T03:56:43.026Z"
+      }
+    ]
+  }
+}

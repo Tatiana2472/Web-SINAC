@@ -1,0 +1,16 @@
+[2026-11-07T03:56:45.987Z] === INICIO DE RESTAURACIÓN EN BASE DE DATOS LIMPIA Y SEPARADA ===
+[2026-11-07T03:56:45.990Z] Archivo cifrado origen: C:\Users\gutie\Respaldos_Privados_SINAC\sinac_backup_2026-11-07T03-56-45-852Z.sqlite.enc
+[2026-11-07T03:56:45.990Z] Base de datos destino (limpia y separada): C:\Users\gutie\Proyecto integrador\database\sinac_restaurada.sqlite
+[2026-11-07T03:56:45.990Z] Estado inicial del destino: No existe (base limpia verificada)
+[2026-11-07T03:56:45.991Z] Hash SHA-256 esperado (.enc):  e4310df63011301d021bac86ec1cee5cdb36e95c300b7a3da03661419f9076b2
+[2026-11-07T03:56:45.991Z] Hash SHA-256 calculado (.enc): e4310df63011301d021bac86ec1cee5cdb36e95c300b7a3da03661419f9076b2
+[2026-11-07T03:56:45.991Z] Verificación de hash SHA-256 del respaldo cifrado: OK ( coincidencia exacta )
+[2026-11-07T03:56:46.027Z] Descifrado AES-256-GCM: OK
+[2026-11-07T03:56:46.027Z] Hash SHA-256 SQLite descifrado: 0eb1adb38816f4f6cdb0833413ad97d6bd4375ebdd25f7fdfbaa10802a8bbf75
+[2026-11-07T03:56:46.031Z] Resultado de PRAGMA integrity_check: ok
+[2026-11-07T03:56:46.032Z] Conteo de registros en base original (antes del respaldo): 3
+[2026-11-07T03:56:46.032Z] Conteo de registros en base restaurada (después de restaurar): 3
+[2026-11-07T03:56:46.032Z] Diferencia de registros (faltantes): 0
+[2026-11-07T03:56:46.032Z] Detalle de registros recuperados: [{"codigo_reserva":"SINAC-802953","nombre_visitante":"Royner Gutiérrez Ugalde","fecha_visita":"2026-11-15","monto_total":1600},{"codigo_reserva":"SINAC-802982","nombre_visitante":"Jocelyn Carballo Castillo","fecha_visita":"2026-11-18","monto_total":2400},{"codigo_reserva":"SINAC-803026","nombre_visitante":"Camila Investigadora SINAC","fecha_visita":"2026-11-22","monto_total":3200}]
+[2026-11-07T03:56:46.032Z] Tiempo total medido de restauración (RTO real): 44.02 ms (0.0440 segundos)
+[2026-11-07T03:56:46.032Z] === RESTAURACIÓN FINALIZADA EXITOSAMENTE (CÓDIGO 0) ===

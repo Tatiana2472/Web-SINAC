@@ -1,0 +1,15 @@
+[2026-11-07T03:56:45.853Z] === INICIO DE RESPALDO DE BASE DE DATOS SQLITE (MODO WAL) ===
+[2026-11-07T03:56:45.856Z] Base de datos origen: C:\Users\gutie\Proyecto integrador\database\sinac.sqlite
+[2026-11-07T03:56:45.856Z] Ubicación externa privada: C:\Users\gutie\Respaldos_Privados_SINAC
+[2026-11-07T03:56:45.858Z] Modo de journal verificado: wal
+[2026-11-07T03:56:45.858Z] Registros actuales en tabla 'reservaciones': 3
+[2026-11-07T03:56:45.882Z] Copia consistente SQLite completada: sinac_backup_2026-11-07T03-56-45-852Z.sqlite
+[2026-11-07T03:56:45.918Z] Método de cifrado: AES-256-GCM (derivación de clave scrypt, salt=16B, iv=12B, tag=16B)
+[2026-11-07T03:56:45.918Z] Archivo cifrado generado: C:\Users\gutie\Respaldos_Privados_SINAC\sinac_backup_2026-11-07T03-56-45-852Z.sqlite.enc
+[2026-11-07T03:56:45.918Z] Tamaño base original: 16384 bytes (16.00 KB)
+[2026-11-07T03:56:45.918Z] Tamaño archivo cifrado: 16428 bytes (16.04 KB)
+[2026-11-07T03:56:45.918Z] Hash SHA-256 (archivo cifrado .enc): e4310df63011301d021bac86ec1cee5cdb36e95c300b7a3da03661419f9076b2
+[2026-11-07T03:56:45.918Z] Hash SHA-256 (base SQLite original): 0eb1adb38816f4f6cdb0833413ad97d6bd4375ebdd25f7fdfbaa10802a8bbf75
+[2026-11-07T03:56:45.919Z] Archivo de verificación hash: C:\Users\gutie\Respaldos_Privados_SINAC\sinac_backup_2026-11-07T03-56-45-852Z.sha256
+[2026-11-07T03:56:45.919Z] Tiempo total de respaldo y cifrado: 66.18 ms
+[2026-11-07T03:56:45.919Z] === RESPALDO FINALIZADO EXITOSAMENTE (CÓDIGO 0) ===

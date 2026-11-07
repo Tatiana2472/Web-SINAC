@@ -1,0 +1,71 @@
+{
+  "fechaEjecucion": "2026-11-07T03:56:48.109Z",
+  "umbrales": {
+    "porcentajeErroresMaximo": 0,
+    "p95MaximoMs": 500
+  },
+  "escenarios": [
+    {
+      "endpoint": "GET / (Página Principal)",
+      "totalSolicitudes": 500,
+      "exitosas": 500,
+      "fallidas": 0,
+      "porcentajeErrores": 0,
+      "rps": 1569.31,
+      "promedioMs": 5.23,
+      "minMs": 0.75,
+      "p50Ms": 3.81,
+      "p95Ms": 8.21,
+      "p99Ms": 33.53,
+      "maxMs": 91.9,
+      "cumpleUmbralErrores": true,
+      "cumpleUmbralP95": true
+    },
+    {
+      "endpoint": "GET /api/reservations (Consulta SQLite WAL)",
+      "totalSolicitudes": 500,
+      "exitosas": 500,
+      "fallidas": 0,
+      "porcentajeErrores": 0,
+      "rps": 576.44,
+      "promedioMs": 17.16,
+      "minMs": 6.72,
+      "p50Ms": 16.31,
+      "p95Ms": 24.78,
+      "p99Ms": 36.41,
+      "maxMs": 39.58,
+      "cumpleUmbralErrores": true,
+      "cumpleUmbralP95": true
+    },
+    {
+      "endpoint": "POST /api/reservations (Escritura SQLite WAL)",
+      "totalSolicitudes": 500,
+      "exitosas": 500,
+      "fallidas": 0,
+      "porcentajeErrores": 0,
+      "rps": 610.07,
+      "promedioMs": 16.21,
+      "minMs": 13.15,
+      "p50Ms": 15.53,
+      "p95Ms": 19.79,
+      "p99Ms": 31.9,
+      "maxMs": 40.63,
+      "cumpleUmbralErrores": true,
+      "cumpleUmbralP95": true
+    }
+  ],
+  "pruebaNegativa400": {
+    "status": 400,
+    "respuesta": {
+      "error": "Faltan campos requeridos (nombre, email, fecha_visita)"
+    },
+    "latenciaMs": 1.58,
+    "aprobada": true
+  },
+  "recursosSistema": {
+    "cpuModelo": "AMD Ryzen 7 7445HS w/ Radeon 740M Graphics     ",
+    "nucleos": 12,
+    "memoriaRssMB": 121.7,
+    "memoriaHeapUsedMB": 18.47
+  }
+}

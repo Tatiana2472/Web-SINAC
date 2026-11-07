@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-11-07T03:56:45.852Z",
+  "sourceDbPath": "C:\\Users\\gutie\\Proyecto integrador\\database\\sinac.sqlite",
+  "encryptedBackupPath": "C:\\Users\\gutie\\Respaldos_Privados_SINAC\\sinac_backup_2026-11-07T03-56-45-852Z.sqlite.enc",
+  "hashFilePath": "C:\\Users\\gutie\\Respaldos_Privados_SINAC\\sinac_backup_2026-11-07T03-56-45-852Z.sha256",
+  "sha256Encrypted": "e4310df63011301d021bac86ec1cee5cdb36e95c300b7a3da03661419f9076b2",
+  "sha256Original": "0eb1adb38816f4f6cdb0833413ad97d6bd4375ebdd25f7fdfbaa10802a8bbf75",
+  "rawSizeBytes": 16384,
+  "encryptedSizeBytes": 16428,
+  "totalRegistros": 3,
+  "duracionMs": 66.18
+}
