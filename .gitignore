@@ -1,14 +1,14 @@
-node_modules
-.vs/ 
+﻿node_modules
+.vs/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
 *.db
 *.db-wal
 *.db-shm
-dist/ 
+dist/
 
-# Archivos generados por el sistema de respaldo/restauración
+# Archivos generados por el sistema de respaldo/restauraciÃ³n
 *.sqlite.enc
 *.sha256
 pruebas/respaldo_restauracion/ultimo_respaldo.json
