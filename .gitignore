@@ -7,3 +7,14 @@ node_modules
 *.db-wal
 *.db-shm
 dist/ 
+
+# Archivos generados por el sistema de respaldo/restauración
+*.sqlite.enc
+*.sha256
+pruebas/respaldo_restauracion/ultimo_respaldo.json
+pruebas/respaldo_restauracion/respaldo.log
+pruebas/respaldo_restauracion/restauracion.log
+pruebas/evidencia_api_persistencia.log
+pruebas/evidencia_api_persistencia.json
+pruebas/rendimiento/resultados_carga.log
+pruebas/rendimiento/resultados_carga.json

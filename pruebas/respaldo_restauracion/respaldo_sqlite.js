@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync, backup } from 'node:sqlite';
 
@@ -8,7 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const sourceDbPath = process.env.DB_PATH || path.join(__dirname, '../../database/sinac.sqlite');
-const externalBackupDir = process.env.BACKUP_DIR || 'C:\\Users\\gutie\\Respaldos_Privados_SINAC';
+// Usar el directorio home del usuario actual en lugar de una ruta fija por nombre de usuario
+const externalBackupDir = process.env.BACKUP_DIR || path.join(os.homedir(), 'Respaldos_Privados_SINAC');
 const logPath = path.join(__dirname, 'respaldo.log');
 
 // Clave de cifrado derivada desde variable de entorno (o clave de respaldo institucional en pruebas)
@@ -19,7 +21,18 @@ async function ejecutarRespaldo() {
   const timestamp = new Date().toISOString();
   const fileStamp = timestamp.replace(/[:.]/g, '-');
 
-  fs.mkdirSync(externalBackupDir, { recursive: true });
+  try {
+    fs.mkdirSync(externalBackupDir, { recursive: true });
+  } catch (err) {
+    if (err.code === 'EPERM' || err.code === 'EACCES') {
+      console.error('[ERROR] Sin permisos para crear el directorio de respaldo: ' + externalBackupDir);
+      console.error('        Verifica que el usuario tiene permisos de escritura en: ' + os.homedir());
+      console.error('        O define la variable de entorno BACKUP_DIR con una ruta accesible.');
+    } else {
+      console.error('[ERROR] No se pudo crear el directorio de respaldo: ' + err.message);
+    }
+    process.exit(1);
+  }
 
   const tempBackupSqlite = path.join(externalBackupDir, `sinac_backup_${fileStamp}.sqlite`);
   const encryptedBackupPath = path.join(externalBackupDir, `sinac_backup_${fileStamp}.sqlite.enc`);
@@ -33,8 +46,8 @@ async function ejecutarRespaldo() {
   };
 
   log('=== INICIO DE RESPALDO DE BASE DE DATOS SQLITE (MODO WAL) ===');
-  log(`Base de datos origen: ${sourceDbPath}`);
-  log(`Ubicación externa privada: ${externalBackupDir}`);
+  log('Base de datos origen: ' + path.basename(sourceDbPath));
+  log('Directorio de respaldo: [privado — omitido del log]');
 
   // 1. Verificar estado de la base de origen y conteo
   const dbOrigen = new DatabaseSync(sourceDbPath);
@@ -77,14 +90,14 @@ async function ejecutarRespaldo() {
 
   const duracionMs = (performance.now() - inicio).toFixed(2);
 
-  log(`Método de cifrado: AES-256-GCM (derivación de clave scrypt, salt=16B, iv=12B, tag=16B)`);
-  log(`Archivo cifrado generado: ${encryptedBackupPath}`);
-  log(`Tamaño base original: ${rawBuffer.length} bytes (${(rawBuffer.length / 1024).toFixed(2)} KB)`);
-  log(`Tamaño archivo cifrado: ${statsCifrado.size} bytes (${(statsCifrado.size / 1024).toFixed(2)} KB)`);
-  log(`Hash SHA-256 (archivo cifrado .enc): ${sha256Encrypted}`);
-  log(`Hash SHA-256 (base SQLite original): ${sha256Original}`);
-  log(`Archivo de verificación hash: ${hashFilePath}`);
-  log(`Tiempo total de respaldo y cifrado: ${duracionMs} ms`);
+  log('Método de cifrado: AES-256-GCM (derivación de clave scrypt, salt=16B, iv=12B, tag=16B)');
+  log('Archivo cifrado generado: ' + path.basename(encryptedBackupPath) + ' (en directorio de respaldos privado)');
+  log('Tamaño base original: ' + rawBuffer.length + ' bytes (' + (rawBuffer.length / 1024).toFixed(2) + ' KB)');
+  log('Tamaño archivo cifrado: ' + statsCifrado.size + ' bytes (' + (statsCifrado.size / 1024).toFixed(2) + ' KB)');
+  log('Hash SHA-256 (archivo cifrado .enc): ' + sha256Encrypted);
+  log('Hash SHA-256 (base SQLite original): ' + sha256Original);
+  log('Archivo de verificación hash: ' + path.basename(hashFilePath) + ' (en directorio de respaldos privado)');
+  log('Tiempo total de respaldo y cifrado: ' + duracionMs + ' ms');
   log('=== RESPALDO FINALIZADO EXITOSAMENTE (CÓDIGO 0) ===');
 
   fs.writeFileSync(logPath, logs.join('\n') + '\n', 'utf8');

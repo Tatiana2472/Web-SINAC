@@ -35,11 +35,16 @@ function ejecutarRestauracion() {
   const inicio = performance.now();
 
   log('=== INICIO DE RESTAURACIÓN EN BASE DE DATOS LIMPIA Y SEPARADA ===');
-  log(`Archivo cifrado origen: ${meta.encryptedBackupPath}`);
-  log(`Base de datos destino (limpia y separada): ${restoredDbPath}`);
-  log(`Estado inicial del destino: No existe (base limpia verificada)`);
+  log('Archivo cifrado origen: ' + path.basename(meta.encryptedBackupPath) + ' (en directorio de respaldos privado)');
+  log('Base de datos destino (limpia y separada): ' + path.basename(restoredDbPath));
+  log('Estado inicial del destino: No existe (base limpia verificada)');
 
-  // 1. Leer archivo cifrado y verificar Hash SHA-256 antes de restaurar
+  // 1. Verificar que el archivo cifrado exista antes de intentar leerlo
+  if (!fs.existsSync(meta.encryptedBackupPath)) {
+    throw new Error('Archivo cifrado no encontrado. Verifica que el directorio de respaldos existe y es accesible en este equipo.');
+  }
+
+  // 2. Leer archivo cifrado y verificar Hash SHA-256 antes de restaurar
   const payload = fs.readFileSync(meta.encryptedBackupPath);
   const hashCalculado = crypto.createHash('sha256').update(payload).digest('hex');
 
@@ -88,7 +93,7 @@ function ejecutarRestauracion() {
   log(`Conteo de registros en base original (antes del respaldo): ${conteoOriginal}`);
   log(`Conteo de registros en base restaurada (después de restaurar): ${conteoRestaurado}`);
   log(`Diferencia de registros (faltantes): ${conteoOriginal - conteoRestaurado}`);
-  log(`Detalle de registros recuperados: ${JSON.stringify(registrosRestaurados)}`);
+  log('Detalle de registros recuperados: ' + registrosRestaurados.length + ' registro(s) verificado(s) [datos omitidos del log]');
   log(`Tiempo total medido de restauración (RTO real): ${duracionMs} ms (${duracionSeg} segundos)`);
   log('=== RESTAURACIÓN FINALIZADA EXITOSAMENTE (CÓDIGO 0) ===');
 

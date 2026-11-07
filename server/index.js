@@ -11,6 +11,16 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Retirar cabecera X-Powered-By por seguridad
+app.disable('x-powered-by');
+
+// Cabeceras de seguridad requeridas: HSTS y X-Content-Type-Options
+app.use((req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
 app.use(cors());
 app.use(express.json());
 
@@ -152,6 +162,10 @@ app.post('/api/reservations', (req, res) => {
 });
 
 app.get('/api/reservations', (req, res) => {
+  const token = process.env.ADMIN_TOKEN;
+  if (!token || req.get('authorization') !== `Bearer ${token}`) {
+    return res.status(401).json({ error: 'No autorizado' });
+  }
   try {
     const reservations = getAllReservationsStmt.all();
     res.json({

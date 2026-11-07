@@ -20,6 +20,8 @@ export const options = {
 };
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:3001';
+const ADMIN_TOKEN = __ENV.ADMIN_TOKEN || '';
+const authHeaders = { Authorization: `Bearer ${ADMIN_TOKEN}` };
 
 export default function () {
   // 1. Prueba sobre página principal (GET /)
@@ -29,12 +31,16 @@ export default function () {
     'GET / tiempo < 500ms': (r) => r.timings.duration < 500,
   });
 
-  // 2. Prueba de consulta de reservaciones (GET /api/reservations)
-  const resGetApi = http.get(`${BASE_URL}/api/reservations`);
-  check(resGetApi, {
-    'GET /api/reservations responde 200': (r) => r.status === 200,
-    'GET /api/reservations devuelve status success': (r) => r.json('status') === 'success',
-  });
+  // 2. Prueba de consulta de reservaciones (GET /api/reservations) — requiere token
+  if (!ADMIN_TOKEN) {
+    console.warn('[k6] ADMIN_TOKEN no definido: GET /api/reservations se omite para evitar falsos negativos.');
+  } else {
+    const resGetApi = http.get(`${BASE_URL}/api/reservations`, { headers: authHeaders });
+    check(resGetApi, {
+      'GET /api/reservations responde 200': (r) => r.status === 200,
+      'GET /api/reservations devuelve status success': (r) => r.json('status') === 'success',
+    });
+  }
 
   // 3. Prueba de creación de reservación (POST /api/reservations)
   const payload = JSON.stringify({
