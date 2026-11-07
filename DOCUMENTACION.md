@@ -132,3 +132,4 @@ Si algún compañero quiere correr el proyecto en su propia computadora, debe se
 ---
 
 Última actualización: 21 de junio de 2026
+- Fecha: 2026-11-07 | Autor: CamilaChaves-Rojas | Rama: main | Descripción: Actualización de documentación y registro de la proyección presupuestaria de Laravel Cloud. | Estado: Completado
