@@ -1,32 +1,25 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import pg from 'pg';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { Pool } = pg;
 
-const dbPath = path.join(__dirname, '../database/sinac.sqlite');
-const schemaPath = path.join(__dirname, '../database/schema.sql');
-const seedPath = path.join(__dirname, '../database/seed.sql');
+export const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT || 5432),
+  database: process.env.DB_DATABASE,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  max: 5,
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000,
+});
 
-let Database;
-try {
-  // Intentar usar el módulo nativo node:sqlite (Node 22+) o better-sqlite3
-  const sqliteModule = await import('better-sqlite3').catch(() => null);
-  if (sqliteModule) {
-    Database = sqliteModule.default;
-  }
-} catch (e) {
-  console.log('Using fallback DB engine or better-sqlite3 pending installation.');
-}
+export async function verificarConexion() {
+  const resultado = await pool.query(
+    'SELECT current_database() AS database_name'
+  );
 
-export function initDatabase() {
-  const dbDir = path.dirname(dbPath);
-  if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-  }
-
-  console.log(`[DB] Base de datos inicializada en: ${dbPath}`);
-  console.log(`[DB] Esquema cargado desde: ${schemaPath}`);
-  console.log(`[DB] Datos iniciales desde: ${seedPath}`);
+  console.log(
+    '[DB] Conexion PostgreSQL verificada:',
+    resultado.rows[0].database_name
+  );
 }
