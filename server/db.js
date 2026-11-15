@@ -2,12 +2,20 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
+const configuracion = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+    }
+  : {
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT || 5432),
+      database: process.env.DB_DATABASE,
+      user: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+    };
+
 export const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT || 5432),
-  database: process.env.DB_DATABASE,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
+  ...configuracion,
   max: 5,
   connectionTimeoutMillis: 10000,
   idleTimeoutMillis: 30000,
