@@ -18,3 +18,8 @@ pruebas/evidencia_api_persistencia.log
 pruebas/evidencia_api_persistencia.json
 pruebas/rendimiento/resultados_carga.log
 pruebas/rendimiento/resultados_carga.json
+
+# Variables de entorno y credenciales
+.env
+.env.*
+!.env.example
