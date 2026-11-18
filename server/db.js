@@ -6,7 +6,7 @@ const { Pool } = pg;
 function obtenerConfiguracion() {
   const databaseUrl = process.env.DATABASE_URL;
 
-  // Conexion a PostgreSQL en Laravel Cloud
+  // Conexion PostgreSQL de Laravel Cloud
   if (databaseUrl) {
     const url = new URL(databaseUrl);
 
@@ -14,7 +14,20 @@ function obtenerConfiguracion() {
       throw new Error('Protocolo PostgreSQL no valido');
     }
 
-    const hostname = url.hostname;
+    const hostnameLaravel = url.hostname;
+
+    // Dominio proporcionado por Laravel Cloud
+    const sufijoLaravel =
+      '.c-3.aws-us-east-1.pg.laravel.cloud';
+
+    // Dominio compatible con el certificado TLS observado
+    const sufijoNeon =
+      '.c-3.us-east-1.aws.neon.tech';
+
+    // Ajustar el hostname solamente para el endpoint identificado
+    const hostname = hostnameLaravel.endsWith(sufijoLaravel)
+      ? hostnameLaravel.slice(0, -sufijoLaravel.length) + sufijoNeon
+      : hostnameLaravel;
 
     return {
       host: hostname,
@@ -61,7 +74,7 @@ export async function verificarConexion() {
       resultado.rows[0].database_name
     );
   } catch (error) {
-    // Diagnostico TLS sin imprimir contrasenas ni DATABASE_URL
+    // Diagnostico sin mostrar contrasenas ni DATABASE_URL
     console.error('[DB] Diagnostico de conexion:', {
       codigo: error.code || 'No disponible',
       nombreEsperado: error.host || 'No disponible',
