@@ -51,12 +51,24 @@ export const pool = new Pool({
 
 // Verificar conexion con la base de datos
 export async function verificarConexion() {
-  const resultado = await pool.query(
-    'SELECT current_database() AS database_name'
-  );
+  try {
+    const resultado = await pool.query(
+      'SELECT current_database() AS database_name'
+    );
 
-  console.log(
-    '[DB] Conexion PostgreSQL verificada:',
-    resultado.rows[0].database_name
-  );
+    console.log(
+      '[DB] Conexion PostgreSQL verificada:',
+      resultado.rows[0].database_name
+    );
+  } catch (error) {
+    // Diagnostico TLS sin imprimir contrasenas ni DATABASE_URL
+    console.error('[DB] Diagnostico de conexion:', {
+      codigo: error.code || 'No disponible',
+      nombreEsperado: error.host || 'No disponible',
+      nombresCertificado:
+        error.cert?.subjectaltname || 'No disponible',
+    });
+
+    throw error;
+  }
 }
