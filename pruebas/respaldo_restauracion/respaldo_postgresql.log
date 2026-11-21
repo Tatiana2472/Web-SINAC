@@ -1,0 +1,19 @@
+[2026-11-21T05:41:01.392Z] === INICIO DE RESPALDO AUTOMÁTICO DE POSTGRESQL 18.6 ===
+[2026-11-21T05:41:01.395Z] Modo de ejecución: AUTOMÁTICO PROGRAMADO (Tarea Programada / Cron)
+[2026-11-21T05:41:01.395Z] Motor de base de datos: PostgreSQL 18.6 (pg_dump formato personalizado -Fc)
+[2026-11-21T05:41:01.395Z] Base de datos origen: sinac_produccion (Host: 127.0.0.1:15432)
+[2026-11-21T05:41:01.395Z] Almacenamiento externo privado: ~/Respaldos_Privados_SINAC_PG [ruta privada protegida]
+[2026-11-21T05:41:01.710Z] Versión del servidor PostgreSQL verificada: 18.6
+[2026-11-21T05:41:01.710Z] Registros confirmados en tabla 'reservaciones' antes del respaldo: 5
+[2026-11-21T05:41:02.070Z] Volcado consistente pg_dump (-Fc) generado en 359.80 ms: pg_sinac_sinac_produccion_2026-11-21T05-41-01-390Z.dump
+[2026-11-21T05:41:02.111Z] Verificación de estructura con pg_restore --list: OK (8 objetos en catálogo)
+[2026-11-21T05:41:02.163Z] Método de cifrado: AES-256-GCM autenticado (scrypt KDF, salt=16B, iv=12B, tag=16B)
+[2026-11-21T05:41:02.163Z] Archivo cifrado guardado en almacenamiento externo: pg_sinac_sinac_produccion_2026-11-21T05-41-01-390Z.dump.enc
+[2026-11-21T05:41:02.163Z] Tamaño volcado pg_dump original: 4090 bytes (3.99 KB)
+[2026-11-21T05:41:02.163Z] Tamaño archivo cifrado (.dump.enc): 4134 bytes (4.04 KB)
+[2026-11-21T05:41:02.163Z] Hash SHA-256 (archivo cifrado .dump.enc): b398ff66487976081117042303698834bd213e07c4f5fcc64a4c4626e50260f1
+[2026-11-21T05:41:02.164Z] Hash SHA-256 (volcado pg_dump original):  c36e85fa483873a18edf2c2514f5e19d9492ee886224c068b8aa48e358ff0a78
+[2026-11-21T05:41:02.164Z] Verificación post-escritura en almacenamiento externo: OK (SHA-256 verificado)
+[2026-11-21T05:41:02.164Z] Manifiesto de verificación generado: pg_sinac_sinac_produccion_2026-11-21T05-41-01-390Z.sha256
+[2026-11-21T05:41:02.164Z] Tiempo total de respaldo automático, cifrado y verificación: 772.64 ms (0.7726 s)
+[2026-11-21T05:41:02.164Z] === RESPALDO AUTOMÁTICO DE POSTGRESQL FINALIZADO EXITOSAMENTE (CÓDIGO 0) ===

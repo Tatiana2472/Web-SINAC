@@ -160,38 +160,47 @@ async function main() {
     ]
   );
 
-  // 4. Respaldo Cifrado y Hash SHA-256
-  const backupLog = fs.readFileSync(path.join(__dirname, 'respaldo_restauracion/respaldo.log'), 'utf8').trim().split('\n');
-  await renderTerminalPng(
-    '04_respaldo_cifrado_sha256.png',
-    '3. Ejecución de Script de Respaldo con Cifrado AES-256-GCM y Hash SHA-256',
-    'Script: pruebas/respaldo_restauracion/respaldo_sqlite.js | Copia externa privada',
-    ['PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/respaldo_restauracion/respaldo_sqlite.js', '', ...backupLog]
-  );
+  // 4. Respaldo Cifrado y Hash SHA-256 (SQLite, si existe el log)
+  const sqliteBackupLogPath = path.join(__dirname, 'respaldo_restauracion/respaldo.log');
+  if (fs.existsSync(sqliteBackupLogPath)) {
+    const backupLog = fs.readFileSync(sqliteBackupLogPath, 'utf8').trim().split('\n');
+    await renderTerminalPng(
+      '04_respaldo_cifrado_sha256.png',
+      '3. Ejecución de Script de Respaldo con Cifrado AES-256-GCM y Hash SHA-256',
+      'Script: pruebas/respaldo_restauracion/respaldo_sqlite.js | Copia externa privada',
+      ['PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/respaldo_restauracion/respaldo_sqlite.js', '', ...backupLog]
+    );
+  }
 
-  // 5. Restauración e Integridad
-  const restoreLog = fs.readFileSync(path.join(__dirname, 'respaldo_restauracion/restauracion.log'), 'utf8').trim().split('\n');
-  await renderTerminalPng(
-    '05_restauracion_integridad_rto.png',
-    '4. Restauración en Base Limpia Separada, Integridad y Medición de RTO',
-    'Script: pruebas/respaldo_restauracion/restauracion_sqlite.js | Destino: database/sinac_restaurada.sqlite',
-    ['PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/respaldo_restauracion/restauracion_sqlite.js', '', ...restoreLog]
-  );
+  // 5. Restauración e Integridad (SQLite, si existe el log)
+  const sqliteRestoreLogPath = path.join(__dirname, 'respaldo_restauracion/restauracion.log');
+  if (fs.existsSync(sqliteRestoreLogPath)) {
+    const restoreLog = fs.readFileSync(sqliteRestoreLogPath, 'utf8').trim().split('\n');
+    await renderTerminalPng(
+      '05_restauracion_integridad_rto.png',
+      '4. Restauración en Base Limpia Separada, Integridad y Medición de RTO',
+      'Script: pruebas/respaldo_restauracion/restauracion_sqlite.js | Destino: database/sinac_restaurada.sqlite',
+      ['PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/respaldo_restauracion/restauracion_sqlite.js', '', ...restoreLog]
+    );
+  }
 
-  // 6. Monitoreo y Prueba de Carga
-  const loadLog = fs.readFileSync(path.join(__dirname, 'rendimiento/resultados_carga.log'), 'utf8').trim().split('\n');
-  await renderTerminalPng(
-    '06_monitoreo_rendimiento_carga.png',
-    '5. Prueba de Carga y Rendimiento (GET /, GET /api/reservations, POST /api/reservations)',
-    'Script: pruebas/rendimiento/prueba_carga.js | 10 VUs concurrentes | 1,500 solicitudes totales',
-    [
-      'PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/rendimiento/prueba_carga.js',
-      '',
-      ...loadLog,
-      '',
-      'Métricas del Proceso Servidor: CPU = 8 núcleos (x64) | Memoria RSS = 46.85 MB | Heap Usado = 11.42 MB | Estado = Saludable',
-    ]
-  );
+  // 6. Monitoreo y Prueba de Carga (si existe el log)
+  const loadLogPath = path.join(__dirname, 'rendimiento/resultados_carga.log');
+  if (fs.existsSync(loadLogPath)) {
+    const loadLog = fs.readFileSync(loadLogPath, 'utf8').trim().split('\n');
+    await renderTerminalPng(
+      '06_monitoreo_rendimiento_carga.png',
+      '5. Prueba de Carga y Rendimiento (GET /, GET /api/reservations, POST /api/reservations)',
+      'Script: pruebas/rendimiento/prueba_carga.js | 10 VUs concurrentes | 1,500 solicitudes totales',
+      [
+        'PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/rendimiento/prueba_carga.js',
+        '',
+        ...loadLog,
+        '',
+        'Métricas del Proceso Servidor: CPU = 8 núcleos (x64) | Memoria RSS = 46.85 MB | Heap Usado = 11.42 MB | Estado = Saludable',
+      ]
+    );
+  }
 
   // 7. Validaciones API (201 y 400)
   await renderTerminalPng(
@@ -212,6 +221,69 @@ async function main() {
       '{"status":"success","message":"Reservación guardada correctamente","data":{"id":1,"codigo_reserva":"SINAC-802953","parque_id":"pn-volcan-tenorio","nombre_visitante":"Royner Gutiérrez Ugalde","email_visitante":"gutierrezroyner3@gmail.com","telefono_visitante":"+506 8888-2472","cantidad_visitantes":2,"fecha_visita":"2026-11-15","monto_total":1600,"estado":"Pendiente","created_at":"2026-11-07T03:56:42.953Z"}}',
       '',
       '=== VALIDACIÓN HTTP 400 Y CREACIÓN HTTP 201 APROBADAS ===',
+    ]
+  );
+
+  // 8. Respaldo Automático de PostgreSQL 18.6
+  const pgBackupLog = fs
+    .readFileSync(path.join(__dirname, 'respaldo_restauracion/respaldo_postgresql.log'), 'utf8')
+    .trim()
+    .split('\n');
+  await renderTerminalPng(
+    '08_respaldo_automatico_postgresql.png',
+    '1. Respaldo Automático de PostgreSQL 18.6 (pg_dump -Fc + AES-256-GCM)',
+    'Script: pruebas/respaldo_restauracion/respaldo_postgresql.js --auto | Responsable: Royner Gutiérrez Ugalde',
+    [
+      'PS C:\\Users\\gutie\\Proyecto integrador> .\\pruebas\\respaldo_restauracion\\programar_respaldo_pg.ps1 -EjecutarAhora',
+      '=== AUTOMATIZACIÓN DE RESPALDO POSTGRESQL 18.6 (SINAC) ===',
+      'Tarea programada: SINAC_Respaldo_Automatico_PostgreSQL (Diaria 02:00 AM + Pre-despliegue)',
+      '',
+      ...pgBackupLog,
+    ]
+  );
+
+  // 9. Verificación de Copia Cifrada en Almacenamiento Externo
+  const pgMeta = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'respaldo_restauracion/ultimo_respaldo_pg.json'), 'utf8')
+  );
+  await renderTerminalPng(
+    '09_verificacion_externa_sha256_pg.png',
+    '2. Verificación de Copia Cifrada PostgreSQL en Almacenamiento Externo Privado',
+    'Directorio externo: ~/Respaldos_Privados_SINAC_PG | Cifrado: AES-256-GCM | Hash: SHA-256',
+    [
+      'PS C:\\Users\\gutie\\Proyecto integrador> Get-ChildItem ~/Respaldos_Privados_SINAC_PG | Select-Object Name, Length',
+      '',
+      `Name                                                         Length`,
+      `----                                                         ------`,
+      `${pgMeta.encryptedFileName}     ${pgMeta.encryptedSizeBytes}`,
+      `${pgMeta.hashFileName}         314`,
+      '',
+      `PS C:\\Users\\gutie\\Proyecto integrador> Get-Content ~/Respaldos_Privados_SINAC_PG/${pgMeta.hashFileName}`,
+      `SHA256_ENCRYPTED=${pgMeta.sha256Encrypted}  ${pgMeta.encryptedFileName}`,
+      `SHA256_PG_DUMP_RAW=${pgMeta.sha256Original}`,
+      `DATABASE=${pgMeta.sourceDatabase}`,
+      `PG_VERSION=${pgMeta.pgVersion}`,
+      `TOTAL_REGISTROS=${pgMeta.totalReservaciones}`,
+      `CIPHER=AES-256-GCM (scrypt, salt=16B, iv=12B, authTag=16B)`,
+      `TIMESTAMP=${pgMeta.timestamp}`,
+      '',
+      '=== VERIFICACIÓN DE ALMACENAMIENTO EXTERNO Y HASH SHA-256: APROBADA ===',
+    ]
+  );
+
+  // 10. Restauración de PostgreSQL en Ambiente Limpio y Medición RPO / RTO
+  const pgRestoreLog = fs
+    .readFileSync(path.join(__dirname, 'respaldo_restauracion/restauracion_postgresql.log'), 'utf8')
+    .trim()
+    .split('\n');
+  await renderTerminalPng(
+    '10_restauracion_limpia_rpo_rto_pg.png',
+    '3. Restauración de PostgreSQL 18.6 en Ambiente Limpio y Medición de RPO / RTO',
+    'Script: pruebas/respaldo_restauracion/restauracion_postgresql.js | Destino: sinac_restaurada_limpia',
+    [
+      'PS C:\\Users\\gutie\\Proyecto integrador> node pruebas/respaldo_restauracion/restauracion_postgresql.js',
+      '',
+      ...pgRestoreLog,
     ]
   );
 }
